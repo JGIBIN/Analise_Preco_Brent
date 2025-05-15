@@ -1,0 +1,33 @@
+# Streamlit core
+streamlit==1.40.0
+
+# Bibliotecas de análise e manipulação de dados
+pandas==2.1.2
+numpy>=1.21.0
+xlsxwriter
+
+# Visualização de dados
+plotly==5.24.1
+
+# Dados financeiros e APIs
+yfinance==0.2.48
+pandas-datareader==0.10.0
+requests==2.31.0
+
+# Utilitários essenciais
+setuptools>=65.5.0
+wheel>=0.41.0
+
+# Modelos de predição e aprendizado de máquina
+statsforecast==1.5.0
+tensorflow>=2.12.0
+scikit-learn==1.3.1
+joblib==1.3.2
+
+# Bibliotecas adicionais necessárias
+streamlit-js-eval>=0.1.0
+
+# Consulta de dados
+google-cloud-firestore
+tomli-w
+tomli==2.0.1
