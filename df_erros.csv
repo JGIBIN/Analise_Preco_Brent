@@ -1,0 +1,2 @@
+modelo,mae,rmse,smape %
+LSTM_Hibrido_ feats_10Anos_Val,1.343,1.809,1.65
