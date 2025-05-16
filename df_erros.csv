@@ -1,2 +1,2 @@
 modelo,mae,rmse,smape %
-LSTM_Hibrido_ feats_10Anos_Val,1.342,1.798,1.64
+LSTM_Hibrido_ feats_10Anos_Val,1.285,1.734,1.58
