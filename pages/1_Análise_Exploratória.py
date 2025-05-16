@@ -82,7 +82,7 @@ for i, evento in enumerate(eventos_filtrados_plot_ma):
     shapes_list_ma.append({
         'type': 'line',
         'x0': event_date, 'y0': 0,      # Começa na base da área de plotagem
-        'x1': event_date, 'y1': 0.9,    # MODIFICADO: Termina em 90% da altura da área de plotagem
+        'x1': event_date, 'y1': 0.7,    # MODIFICADO: Termina em 90% da altura da área de plotagem
         'xref': 'x', 'yref': 'paper',   # 'paper' refere-se à área de plotagem total
         'line': {
             'color': evento['event_color'],
