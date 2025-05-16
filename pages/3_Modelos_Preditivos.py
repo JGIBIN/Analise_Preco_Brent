@@ -21,7 +21,7 @@ if df_historical_10a_app.empty:
     st.error("Não foi possível carregar os dados históricos (últimos 10 anos).")
     st.stop()
 
-st.sidebar.info(f"Modelos usam dados de: {df_historical_10a_app['Data'].min().strftime('%Y-%m-%d')} a {df_historical_10a_app['Data'].max().strftime('%Y-%m-%d')}")
+st.sidebar.info(f"Modelos usam dados de: {df_historical_10a_app['Data'].min().strftime('%d-%m-%Y')} a {df_historical_10a_app['Data'].max().strftime('%d-%m-%Y')}")
 series_data_for_models_app = df_historical_10a_app.set_index('Data')['Value'].asfreq('D').ffill().bfill()
 
 @st.cache_resource
