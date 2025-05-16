@@ -234,7 +234,7 @@ if st.sidebar.button("Realizar Previsão 🚀"):
         else: st.error("Coluna de previsão não determinada.")
 
 st.sidebar.markdown("---")
-st.sidebar.subheader("Performance (Backtesting do Notebook - Dados de 10 anos)")
+st.sidebar.subheader("Performance dos Modelos")
 if not df_performance_metrics_app.empty:
     col_modelo_erro_app = 'modelo' if 'modelo' in df_performance_metrics_app.columns else 'Modelo' if 'Modelo' in df_performance_metrics_app.columns else None
     if col_modelo_erro_app: st.sidebar.dataframe(df_performance_metrics_app.set_index(col_modelo_erro_app))
