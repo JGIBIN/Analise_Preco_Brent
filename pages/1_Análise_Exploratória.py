@@ -214,48 +214,75 @@ else:
 # --- 4.3 Heatmap de Sazonalidade Mensal ---
 st.subheader("Heatmap de Sazonalidade Mensal")
 st.markdown("Visualiza o preço médio mensal ao longo dos anos para identificar possíveis padrões sazonais.")
-df_heatmap_src = df_historical_10a.copy()
+df_heatmap_src = df_historical_10a.copy() # Usa o DataFrame já carregado e filtrado para os últimos 10 anos
 df_heatmap_src['Ano'] = df_heatmap_src['Data'].dt.year
-# Tentar obter nomes dos meses em português, se o locale estiver configurado
+
+# Utilizar nomes de meses em inglês internamente para robustez na criação do pivot e ordenação
+df_heatmap_src['Mês_Nome_Ingles'] = df_heatmap_src['Data'].dt.month_name()
+english_months_order = ["January", "February", "March", "April", "May", "June", 
+                        "July", "August", "September", "October", "November", "December"]
+
+# Tentar obter nomes dos meses em português para exibição nos rótulos do gráfico
+display_month_names = english_months_order # Default para inglês
 try:
     import locale
-    # Tentar configurar para o locale do sistema ou um específico pt_BR
+    # Salva o locale atual para restaurá-lo depois
+    original_locale_time = locale.getlocale(locale.LC_TIME)
     try:
-        locale.setlocale(locale.LC_TIME, '') # Locale do sistema
+        locale.setlocale(locale.LC_TIME, 'pt_BR.UTF-8')
+        display_month_names = [pd.Timestamp(2000, i, 1).strftime('%B').capitalize() for i in range(1, 13)]
     except locale.Error:
-        try:
-            locale.setlocale(locale.LC_TIME, 'pt_BR.UTF-8') # pt_BR específico
-        except locale.Error:
-            st.caption("Locale pt_BR não disponível, meses podem aparecer em inglês.")
-    df_heatmap_src['Mês'] = df_heatmap_src['Data'].dt.strftime('%B').str.capitalize()
-    months_order_heatmap = [pd.Timestamp(2000, i, 1).strftime('%B').capitalize() for i in range(1,13)]
-except ImportError: # Se locale não estiver disponível
-    df_heatmap_src['Mês'] = df_heatmap_src['Data'].dt.month_name()
-    months_order_heatmap = ["January", "February", "March", "April", "May", "June", 
-                    "July", "August", "September", "October", "November", "December"]
+        st.caption("Locale 'pt_BR.UTF-8' não disponível para nomes dos meses no heatmap. Usando inglês.")
+    finally:
+        # Restaura o locale original para não afetar outras partes da aplicação
+        if original_locale_time[0] or original_locale_time[1]: # Evitar restaurar (None,None)
+            locale.setlocale(locale.LC_TIME, original_locale_time)
+        else: # Se o locale original era (None, None), tente definir um padrão ou o locale do sistema
+             locale.setlocale(locale.LC_TIME, '')
 
 
+except ImportError:
+    st.caption("Módulo 'locale' não disponível. Usando nomes de meses em inglês no heatmap.")
+except Exception as e_locale_display:
+    st.caption(f"Erro ao tentar traduzir nomes dos meses para exibição: {e_locale_display}. Usando inglês.")
+
+# Criar o pivot table usando os nomes dos meses em inglês
 heatmap_data_plot = pd.pivot_table(df_heatmap_src, values='Value', 
-                              index='Ano', columns='Mês', 
-                              aggfunc='mean')
-# Reordenar colunas para ordem cronológica dos meses
-try:
-    heatmap_data_plot = heatmap_data_plot.reindex(columns=months_order_heatmap)
-except Exception: # Se a reordenação falhar (ex: nomes de meses diferentes)
-    st.caption("Não foi possível reordenar os meses no heatmap automaticamente.")
-    heatmap_data_plot.sort_index(axis=1, inplace=True) # Tenta ordenação alfabética como fallback
+                                   index='Ano', columns='Mês_Nome_Ingles', 
+                                   aggfunc='mean')
+
+# Garantir que todas as colunas de meses (em inglês) existam, preenchendo com NaN se necessário,
+# e depois reordenar para a ordem cronológica correta.
+for month_name_eng in english_months_order:
+    if month_name_eng not in heatmap_data_plot.columns:
+        heatmap_data_plot[month_name_eng] = np.nan
+            
+heatmap_data_plot = heatmap_data_plot.reindex(columns=english_months_order)
 
 if not heatmap_data_plot.empty:
-    fig_heatmap_plot, ax_heatmap = plt.subplots(figsize=(12, 8))
-    sns.heatmap(heatmap_data_plot, annot=True, fmt=".1f", cmap="viridis", ax=ax_heatmap, linewidths=.5, cbar_kws={'label': 'Preço Médio (USD)'})
-    ax_heatmap.set_title('Preço Médio Mensal do Petróleo Brent por Ano (Últimos 10 Anos)')
-    plt.xticks(rotation=45, ha='right')
-    plt.yticks(rotation=0)
-    st.pyplot(fig_heatmap_plot)
-    st.markdown("O heatmap mostra o preço médio para cada mês ao longo dos anos. Cores mais claras indicam preços mais altos. Isso pode ajudar a identificar se certos meses consistentemente apresentam preços mais elevados ou mais baixos.")
+    if heatmap_data_plot.isnull().all().all():
+        st.warning("Os dados para o heatmap contêm apenas valores nulos. Verifique os dados de entrada ou o período selecionado.")
+    else:
+        fig_heatmap_plot, ax_heatmap = plt.subplots(figsize=(12, 9)) # Aumentado um pouco o figsize para acomodar melhor
+        sns.heatmap(heatmap_data_plot, annot=True, fmt=".1f", cmap="viridis", 
+                    ax=ax_heatmap, linewidths=.5, cbar_kws={'label': 'Preço Médio (USD)'})
+        
+        ax_heatmap.set_title('Preço Médio Mensal do Petróleo Brent por Ano (Últimos 10 Anos)', fontsize=14)
+        ax_heatmap.set_xlabel('Mês', fontsize=12)
+        ax_heatmap.set_ylabel('Ano', fontsize=12)
+        
+        # Usar os nomes dos meses para exibição (traduzidos ou em inglês)
+        # Usar abreviações se os nomes completos ficarem muito densos
+        xtick_labels_display = [name[:3] for name in display_month_names] # Ex: Jan, Fev, Mar
+        ax_heatmap.set_xticklabels(xtick_labels_display, rotation=45, ha='right')
+        
+        plt.yticks(rotation=0)
+        plt.tight_layout() # Ajusta o layout para evitar que os rótulos se sobreponham
+        st.pyplot(fig_heatmap_plot)
+        st.markdown("O heatmap mostra o preço médio para cada mês ao longo dos anos. Cores mais claras indicam preços mais altos. Isso pode ajudar a identificar se certos meses consistentemente apresentam preços mais elevados ou mais baixos.")
 else:
-    st.warning("Não foi possível gerar o heatmap de sazonalidade.")
-
+    st.warning("Não foi possível gerar o heatmap de sazonalidade (a tabela de dados para o heatmap está vazia).")
+    
 st.markdown("---")
 st.subheader("Conclusões da Análise Exploratória")
 st.markdown("""
