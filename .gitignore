@@ -1,0 +1,35 @@
+# Ambientes virtuais Python
+STREAMLIT_APP/venv/
+
+# Arquivos de cache e compilados do Python
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Arquivos de cache do Jupyter Notebook
+.ipynb_checkpoints
+
+# Arquivos de configuração do IDE (exemplo para VSCode)
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+*.code-workspace
+
+# Local History for Visual Studio Code
+.history/
+
+# Arquivos de sistema operacional
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Logs
+logs/
+*.log
+
+# Outros
+*.bak
+*.swp
+*~
