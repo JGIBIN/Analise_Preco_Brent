@@ -205,18 +205,29 @@ if st.sidebar.button("Realizar Previsão 🚀"):
         # Plotagem comum
         if col_name_plot_app and col_name_plot_app in df_forecast_display_app:
             fig_plot = go.Figure()
+            # ... (código do gráfico permanece o mesmo) ...
             fig_plot.add_trace(go.Scatter(x=df_historical_10a_app['Data'].tail(180), y=df_historical_10a_app['Value'].tail(180), name="Histórico Recente", line=dict(color='blue')))
             fig_plot.add_trace(go.Scatter(x=df_forecast_display_app['Data'], y=df_forecast_display_app[col_name_plot_app], name=col_name_plot_app, line=dict(color='green' if "LSTM" in col_name_plot_app else 'orange', dash='dash')))
             fig_plot.update_layout(title=f"Previsão {modelo_escolhido_app}", xaxis_title="Data", yaxis_title="Preço (US$)")
             st.plotly_chart(fig_plot, use_container_width=True)
-            st.write(f"Valores Previstos ({col_name_plot_app}):")
-            # Linha original para exibir o DataFrame:
-            # st.dataframe(df_forecast_display_app[['Data', col_name_plot_app]].set_index('Data'))
             
-            # MODIFICAÇÃO AQUI:
-            df_to_display = df_forecast_display_app[['Data', col_name_plot_app]].set_index('Data').copy()
-            # Arredonda a coluna de previsão para 2 casas decimais
+            st.write(f"Valores Previstos ({col_name_plot_app}):")
+            
+            # Prepara o DataFrame para exibição
+            df_to_display = df_forecast_display_app[['Data', col_name_plot_app]].copy()
+            
+            # 1. Garante que a coluna 'Data' seja do tipo datetime (geralmente já é, mas bom verificar)
+            df_to_display['Data'] = pd.to_datetime(df_to_display['Data'])
+            
+            # 2. Formata a coluna 'Data' para string no formato dd/mm/yyyy ANTES de definir como índice
+            df_to_display['Data'] = df_to_display['Data'].dt.strftime('%d/%m/%Y')
+            
+            # 3. Define a coluna 'Data' (agora como string formatada) como índice
+            df_to_display = df_to_display.set_index('Data')
+            
+            # 4. Arredonda a coluna de previsão para 2 casas decimais
             df_to_display[col_name_plot_app] = df_to_display[col_name_plot_app].round(2)
+            
             st.dataframe(df_to_display)
 
         elif col_name_plot_app: st.error(f"Coluna de previsão '{col_name_plot_app}' não gerada.")
