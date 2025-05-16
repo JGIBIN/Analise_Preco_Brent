@@ -60,11 +60,11 @@ fig_hist_ma.add_trace(go.Scatter(x=df_historical_10a['Data'], y=df_historical_10
 
 # Lista de eventos importantes para anotar no gráfico
 eventos = [
-    {'Data': '2014-11-27', 'descricao': 'OPEP decide manter produção, iniciando queda de preços', 'color': 'grey', 'ay_offset': -40},
-    {'Data': '2016-01-20', 'descricao': 'Preço atinge mínima da década após decisão da OPEP', 'color': 'grey', 'ay_offset': -70},
-    {'Data': '2020-03-11', 'descricao': 'COVID-19 declarada pandemia global', 'color': 'black', 'ay_offset': -100},
-    {'Data': '2020-04-20', 'descricao': 'Preço do petróleo WTI fica negativo (afeta Brent)', 'color': 'black', 'ay_offset': -130},
-    {'Data': '2022-02-24', 'descricao': 'Início da Guerra na Ucrânia', 'color': 'red', 'ay_offset': -160}
+    {'Data': '2014-11-27', 'descricao': 'OPEP decide manter produção, iniciando queda de preços', 'color': 'white', 'ay_offset': -40},
+    {'Data': '2016-01-20', 'descricao': 'Preço atinge mínima da década após decisão da OPEP', 'color': 'white', 'ay_offset': -70},
+    {'Data': '2020-03-11', 'descricao': 'COVID-19 declarada pandemia global', 'color': 'white', 'ay_offset': -100},
+    {'Data': '2020-04-20', 'descricao': 'Preço do petróleo WTI fica negativo (afeta Brent)', 'color': 'white', 'ay_offset': -130},
+    {'Data': '2022-02-24', 'descricao': 'Início da Guerra na Ucrânia', 'color': 'white', 'ay_offset': -160}
 ]
 eventos_filtrados_plot_ma = [e for e in eventos if pd.to_datetime(e['Data']) >= df_historical_10a['Data'].min() and pd.to_datetime(e['Data']) <= df_historical_10a['Data'].max()]
 annotations_list_ma = []
