@@ -152,7 +152,7 @@ if st.sidebar.button("Realizar Previsão 🚀"):
                     df_forecast_display_app[col_name_plot_app] = [np.nan]*periodo_previsao_app
         
         # --- LSTM Híbrido com Features Sazonais ---
-        elif modelo_escolhido_app == "LSTM Híbrido":
+        elif modelo_escolhido_app == "LSTM Híbrido (Recomendado)":
             # ... (código LSTM como na resposta anterior, que já era multivariado) ...
             # Apenas garanta que seq_length_lstm_app e num_features_lstm_app estão corretos
             st.subheader(f"🔮 Previsão com LSTM Híbrido para {periodo_previsao_app} dias")
