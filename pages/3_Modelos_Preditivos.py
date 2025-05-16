@@ -210,7 +210,15 @@ if st.sidebar.button("Realizar Previsão 🚀"):
             fig_plot.update_layout(title=f"Previsão {modelo_escolhido_app}", xaxis_title="Data", yaxis_title="Preço (US$)")
             st.plotly_chart(fig_plot, use_container_width=True)
             st.write(f"Valores Previstos ({col_name_plot_app}):")
-            st.dataframe(df_forecast_display_app[['Data', col_name_plot_app]].set_index('Data'))
+            # Linha original para exibir o DataFrame:
+            # st.dataframe(df_forecast_display_app[['Data', col_name_plot_app]].set_index('Data'))
+            
+            # MODIFICAÇÃO AQUI:
+            df_to_display = df_forecast_display_app[['Data', col_name_plot_app]].set_index('Data').copy()
+            # Arredonda a coluna de previsão para 2 casas decimais
+            df_to_display[col_name_plot_app] = df_to_display[col_name_plot_app].round(2)
+            st.dataframe(df_to_display)
+
         elif col_name_plot_app: st.error(f"Coluna de previsão '{col_name_plot_app}' não gerada.")
         else: st.error("Coluna de previsão não determinada.")
 
