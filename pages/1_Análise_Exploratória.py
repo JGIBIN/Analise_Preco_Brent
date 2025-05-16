@@ -10,6 +10,10 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 from utils import load_historical_data
 import locale
+import logging  # Para um logging mais robusto
+
+# Configurar logging (opcional, mas recomendado)
+logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
 st.set_page_config(page_title="Análise de Negócios Brent", page_icon="💰", layout="wide")
 
@@ -51,9 +55,12 @@ df_plot['MA50'] = df_plot['Value'].rolling(window=50).mean()
 df_plot['MA200'] = df_plot['Value'].rolling(window=200).mean()
 
 fig_price = go.Figure()
-fig_price.add_trace(go.Scatter(x=df_plot['Data'], y=df_plot['Value'], mode='lines', name='Preço Brent', line=dict(color='deepskyblue', width=2)))
-fig_price.add_trace(go.Scatter(x=df_plot['Data'], y=df_plot['MA50'], mode='lines', name='Média Móvel (50d)', line=dict(color='orange', width=1.5, dash='dot')))
-fig_price.add_trace(go.Scatter(x=df_plot['Data'], y=df_plot['MA200'], mode='lines', name='Média Móvel (200d)', line=dict(color='crimson', width=1.5, dash='dash')))
+fig_price.add_trace(go.Scatter(x=df_plot['Data'], y=df_plot['Value'], mode='lines', name='Preço Brent',
+                             line=dict(color='deepskyblue', width=2)))
+fig_price.add_trace(go.Scatter(x=df_plot['Data'], y=df_plot['MA50'], mode='lines', name='Média Móvel (50d)',
+                             line=dict(color='orange', width=1.5, dash='dot')))
+fig_price.add_trace(go.Scatter(x=df_plot['Data'], y=df_plot['MA200'], mode='lines', name='Média Móvel (200d)',
+                             line=dict(color='crimson', width=1.5, dash='dash')))
 
 eventos = [
     {'Data': '2014-11-27', 'descricao': 'OPEP mantém produção, preços caem', 'color': 'white', 'ay_offset': -40},
@@ -62,7 +69,9 @@ eventos = [
     {'Data': '2020-04-20', 'descricao': 'WTI Negativo (Impacto Brent)', 'color': 'white', 'ay_offset': -130},
     {'Data': '2022-02-24', 'descricao': 'Início da Guerra na Ucrânia', 'color': 'white', 'ay_offset': -160}
 ]
-eventos_filtrados_plot = [e for e in eventos if pd.to_datetime(e['Data']) >= df_historical_10a['Data'].min() and pd.to_datetime(e['Data']) <= df_historical_10a['Data'].max()]
+eventos_filtrados_plot = [e for e in eventos if
+                         pd.to_datetime(e['Data']) >= df_historical_10a['Data'].min() and pd.to_datetime(
+                             e['Data']) <= df_historical_10a['Data'].max()]
 annotations_list = []
 shapes_list = []
 max_y_plot = df_historical_10a['Value'].max() if not df_historical_10a.empty else 150
@@ -72,8 +81,10 @@ for i, evento in enumerate(eventos_filtrados_plot):
     shapes_list.append({'type': 'line', 'x0': event_date, 'y0': 0, 'x1': event_date, 'y1': 1, 'xref': 'x', 'yref': 'paper',
                         'line': {'color': evento['color'], 'width': 1.5, 'dash': 'dashdot'}})
     annotations_list.append({'x': event_date, 'y': max_y_plot * (1.05 + i * 0.05), 'xref': 'x', 'yref': 'y',
-                             'text': f"<b>{evento['descricao']}</b><br>({event_date.strftime('%b %Y')})", 'showarrow': True,
-                             'arrowhead': 2, 'arrowwidth': 1.5, 'arrowcolor': evento['color'], 'ax': 0, 'ay': evento['ay_offset'],
+                             'text': f"<b>{evento['descricao']}</b><br>({event_date.strftime('%b %Y')})",
+                             'showarrow': True,
+                             'arrowhead': 2, 'arrowwidth': 1.5, 'arrowcolor': evento['color'], 'ax': 0,
+                             'ay': evento['ay_offset'],
                              'font': {'color': 'black', 'size': 10}, 'bgcolor': evento['color'], 'opacity': 0.7,
                              'bordercolor': 'black', 'borderwidth': 1, 'borderpad': 2})
 
@@ -111,7 +122,8 @@ with insight_cols[1]:
     st.markdown("A guerra na Ucrânia em 2022 aumentou os preços devido a preocupações com o fornecimento.")
 
     st.subheader("Insight 4: Recuperação Pós-Pandemia")
-    st.markdown("A recuperação econômica pós-pandemia e as ações da OPEP+ influenciaram os preços, com preocupações sobre inflação adicionando volatilidade.")
+    st.markdown(
+        "A recuperação econômica pós-pandemia e as ações da OPEP+ influenciaram os preços, com preocupações sobre inflação adicionando volatilidade.")
 
 st.subheader("Insight Adicional: Volatilidade")
 st.markdown("A volatilidade é uma característica constante do mercado de petróleo, exigindo gerenciamento de risco.")
@@ -141,8 +153,10 @@ if len(df_for_analysis.dropna()) >= decomp_period * 2:
 
     except Exception as e:
         st.warning(f"Não foi possível realizar a decomposição sazonal: {e}.")
+        logging.error(f"Erro na decomposição sazonal: {e}", exc_info=True)  # Log do erro completo
 else:
     st.warning(f"Dados insuficientes para decomposição sazonal com período {decomp_period}.")
+    logging.warning(f"Dados insuficientes para decomposição sazonal.")
 
 # --- 3.2 Distribuição dos Preços e Retornos ---
 st.subheader("Distribuição dos Preços e Retornos")
@@ -152,14 +166,17 @@ df_returns.dropna(inplace=True)
 
 col_dist_preco, col_dist_ret = st.columns(2)
 with col_dist_preco:
-    fig_hist_price = px.histogram(df_historical_10a, x="Value", nbins=50, title="Distribuição dos Preços")
+    fig_hist_price = px.histogram(df_historical_10a, x="Value", nbins=50, title="Distribuição dos Preços",
+                                 labels={'Value': 'Preço (USD)'})
     fig_hist_price.update_layout(bargap=0.1)
     st.plotly_chart(fig_hist_price, use_container_width=True)
     st.markdown("O histograma mostra a frequência dos diferentes níveis de preço.")
 
 with col_dist_ret:
     if not df_returns.empty:
-        fig_hist_returns = px.histogram(df_returns, x="Retorno Diário", nbins=100, title="Distribuição dos Retornos Diários")
+        fig_hist_returns = px.histogram(df_returns, x="Retorno Diário", nbins=100,
+                                      title="Distribuição dos Retornos Diários",
+                                      labels={'Retorno Diário': 'Retorno Diário'})
         fig_hist_returns.update_layout(bargap=0.1)
         st.plotly_chart(fig_hist_returns, use_container_width=True)
         st.markdown("A distribuição dos retornos frequentemente apresenta 'caudas pesadas' (mais eventos extremos).")
@@ -195,7 +212,8 @@ if not df_for_analysis.dropna().empty:
     st.write(f"  - Estatística ADF: {adf_stat_orig:.4f}")
     st.write(f"  - P-valor: {p_value_orig:.4f}")
     st.write(f"  - É estacionária? {'Sim' if p_value_orig <= 0.05 else 'Não'}")
-    st.caption(f"Valores Críticos: 1%: {critical_values_orig['1%']:.2f}, 5%: {critical_values_orig['5%']:.2f}, 10%: {critical_values_orig['10%']:.2f}")
+    st.caption(
+        f"Valores Críticos: 1%: {critical_values_orig['1%']:.2f}, 5%: {critical_values_orig['5%']:.2f}, 10%: {critical_values_orig['10%']:.2f}")
 
     log_series = np.log(df_for_analysis.dropna().replace(0, 1e-5))
     diff_log_series = log_series.diff().dropna()
@@ -208,19 +226,9 @@ if not df_for_analysis.dropna().empty:
     st.markdown("Um p-valor baixo sugere que a série é estacionária após transformações.")
 else:
     st.warning("Não foi possível realizar o teste ADF.")
+    logging.warning("Não foi possível realizar o teste ADF.")
 
 # --- 4.2 ACF e PACF ---
 st.subheader("Autocorrelação (ACF e PACF)")
 col1_acf, col2_pacf = st.columns(2)
-if not df_for_analysis.dropna().empty:
-    with col1_acf:
-        fig_acf, ax_acf = plt.subplots(figsize=(8, 4))
-        plot_acf(df_for_analysis.dropna(), lags=40, ax=ax_acf)
-        ax_acf.set_title("Autocorrelação (ACF) - Preços Originais")
-        st.pyplot(fig_acf)
-        st.markdown("Decaimento lento no ACF sugere não-estacionariedade.")
-
-    with col2_pacf:
-        fig_pacf, ax_pacf = plt.subplots(figsize=(8, 4))
-        plot_pacf(df_for_analysis.dropna(), lags=40, ax=ax_pacf, method='ywm')
-        ax_pacf.set_title("Autocorrelação Parcial (PACF)")
+if not df_for_analysis.dropna().
