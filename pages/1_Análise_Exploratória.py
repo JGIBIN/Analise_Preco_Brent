@@ -223,4 +223,4 @@ if not df_for_analysis.dropna().empty:
     with col2_pacf:
         fig_pacf, ax_pacf = plt.subplots(figsize=(8, 4))
         plot_pacf(df_for_analysis.dropna(), lags=40, ax=ax_pacf, method='ywm')
-        ax_pacf.set_title("Autocorrelação Parcial (PACF
+        ax_pacf.set_title("Autocorrelação Parcial (PACF)"
