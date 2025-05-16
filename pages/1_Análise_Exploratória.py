@@ -211,50 +211,6 @@ if not df_for_analysis_stats.dropna().empty:
 else:
     st.warning("Não foi possível plotar ACF/PACF.")
 
-# --- 4.3 Heatmap de Sazonalidade Mensal ---
-st.subheader("Heatmap de Sazonalidade Mensal")
-st.markdown("Visualiza o preço médio mensal ao longo dos anos para identificar possíveis padrões sazonais.")
-df_heatmap_src = df_historical_10a.copy()
-df_heatmap_src['Ano'] = df_heatmap_src['Data'].dt.year
-# Tentar obter nomes dos meses em português, se o locale estiver configurado
-try:
-    import locale
-    # Tentar configurar para o locale do sistema ou um específico pt_BR
-    try:
-        locale.setlocale(locale.LC_TIME, '') # Locale do sistema
-    except locale.Error:
-        try:
-            locale.setlocale(locale.LC_TIME, 'pt_BR.UTF-8') # pt_BR específico
-        except locale.Error:
-            st.caption("Locale pt_BR não disponível, meses podem aparecer em inglês.")
-    df_heatmap_src['Mês'] = df_heatmap_src['Data'].dt.strftime('%B').str.capitalize()
-    months_order_heatmap = [pd.Timestamp(2000, i, 1).strftime('%B').capitalize() for i in range(1,13)]
-except ImportError: # Se locale não estiver disponível
-    df_heatmap_src['Mês'] = df_heatmap_src['Data'].dt.month_name()
-    months_order_heatmap = ["January", "February", "March", "April", "May", "June", 
-                    "July", "August", "September", "October", "November", "December"]
-
-
-heatmap_data_plot = pd.pivot_table(df_heatmap_src, values='Value', 
-                              index='Ano', columns='Mês', 
-                              aggfunc='mean')
-# Reordenar colunas para ordem cronológica dos meses
-try:
-    heatmap_data_plot = heatmap_data_plot.reindex(columns=months_order_heatmap)
-except Exception: # Se a reordenação falhar (ex: nomes de meses diferentes)
-    st.caption("Não foi possível reordenar os meses no heatmap automaticamente.")
-    heatmap_data_plot.sort_index(axis=1, inplace=True) # Tenta ordenação alfabética como fallback
-
-if not heatmap_data_plot.empty:
-    fig_heatmap_plot, ax_heatmap = plt.subplots(figsize=(12, 8))
-    sns.heatmap(heatmap_data_plot, annot=True, fmt=".1f", cmap="viridis", ax=ax_heatmap, linewidths=.5, cbar_kws={'label': 'Preço Médio (USD)'})
-    ax_heatmap.set_title('Preço Médio Mensal do Petróleo Brent por Ano (Últimos 10 Anos)')
-    plt.xticks(rotation=45, ha='right')
-    plt.yticks(rotation=0)
-    st.pyplot(fig_heatmap_plot)
-    st.markdown("O heatmap mostra o preço médio para cada mês ao longo dos anos. Cores mais claras indicam preços mais altos. Isso pode ajudar a identificar se certos meses consistentemente apresentam preços mais elevados ou mais baixos.")
-else:
-    st.warning("Não foi possível gerar o heatmap de sazonalidade.")
 
 st.markdown("---")
 st.subheader("Conclusões da Análise Exploratória")
