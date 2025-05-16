@@ -60,9 +60,9 @@ fig_hist_ma.add_trace(go.Scatter(x=df_historical_10a['Data'], y=df_historical_10
 eventos = [
     {'Data': '2014-11-27', 'descricao': 'OPEP mantém produção, preços caem', 'color': 'darkgrey', 'ay_offset': -40},
     {'Data': '2016-01-20', 'descricao': 'Preço atinge mínima da década (pós-2014)', 'color': 'darkgrey', 'ay_offset': -70},
-    {'Data': '2020-03-11', 'descricao': 'Pandemia COVID-19 declarada', 'color': 'darkgrey', 'ay_offset': -100},
-    {'Data': '2020-04-20', 'descricao': 'WTI Negativo (Impacto Brent)', 'color': 'darkgrey', 'ay_offset': -130},
-    {'Data': '2022-02-24', 'descricao': 'Início da Guerra na Ucrânia', 'color': 'darkgrey', 'ay_offset': -160}
+    {'Data': '2020-03-11', 'descricao': 'Pandemia COVID-19 declarada', 'color': 'darkgrey', 'ay_offset': -70},
+    {'Data': '2020-04-20', 'descricao': 'WTI Negativo (Impacto Brent)', 'color': 'darkgrey', 'ay_offset': -90},
+    {'Data': '2022-02-24', 'descricao': 'Início da Guerra na Ucrânia', 'color': 'darkgrey', 'ay_offset': -70}
 ]
 eventos_filtrados_plot_ma = [e for e in eventos if pd.to_datetime(e['Data']) >= df_historical_10a['Data'].min() and pd.to_datetime(e['Data']) <= df_historical_10a['Data'].max()]
 
