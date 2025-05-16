@@ -59,11 +59,11 @@ fig_hist_ma.add_trace(go.Scatter(x=df_historical_10a['Data'], y=df_historical_10
 
 # Lista de eventos importantes para anotar no gráfico
 eventos = [
-    {'Data': '2014-11-27', 'descricao': 'OPEP decide manter produção, iniciando queda de preços', 'event_color': 'white', 'ay_offset': -40},
-    {'Data': '2016-01-20', 'descricao': 'Preço atinge mínima da década pós-decisão OPEP', 'event_color': 'white', 'ay_offset': -70},
-    {'Data': '2020-03-11', 'descricao': 'COVID-19 declarada pandemia global', 'event_color': 'white', 'ay_offset': -40},
-    {'Data': '2020-04-20', 'descricao': 'Preço do petróleo WTI fica negativo (afeta Brent)', 'event_color': 'white', 'ay_offset': -55},
-    {'Data': '2022-02-24', 'descricao': 'Início da Guerra na Ucrânia', 'event_color': 'white', 'ay_offset': -40}
+    {'Data': '2014-11-27', 'descricao': 'OPEP decide manter produção, queda de preços', 'event_color': 'white', 'ay_offset': -35},
+    {'Data': '2016-01-20', 'descricao': 'Preço atinge mínima da década pós-decisão OPEP', 'event_color': 'white', 'ay_offset': -55},
+    {'Data': '2020-03-11', 'descricao': 'COVID-19 declarada pandemia global', 'event_color': 'white', 'ay_offset': -35},
+    {'Data': '2020-04-20', 'descricao': 'Preço do petróleo WTI fica negativo (afeta Brent)', 'event_color': 'white', 'ay_offset': -45},
+    {'Data': '2022-02-24', 'descricao': 'Início da Guerra na Ucrânia', 'event_color': 'white', 'ay_offset': -35}
 ]
 eventos_filtrados_plot_ma = [e for e in eventos if pd.to_datetime(e['Data']) >= df_historical_10a['Data'].min() and pd.to_datetime(e['Data']) <= df_historical_10a['Data'].max()]
 annotations_list_ma = []
@@ -82,7 +82,7 @@ for i, evento in enumerate(eventos_filtrados_plot_ma):
     shapes_list_ma.append({
         'type': 'line',
         'x0': event_date, 'y0': 0,      # Começa na base da área de plotagem
-        'x1': event_date, 'y1': 0.7,    # MODIFICADO: Termina em 90% da altura da área de plotagem
+        'x1': event_date, 'y1': 0.75,    # MODIFICADO: Termina em 90% da altura da área de plotagem
         'xref': 'x', 'yref': 'paper',   # 'paper' refere-se à área de plotagem total
         'line': {
             'color': evento['event_color'],
