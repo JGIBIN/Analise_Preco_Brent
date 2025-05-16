@@ -233,11 +233,11 @@ if st.sidebar.button("Realizar Previsão 🚀"):
         elif col_name_plot_app: st.error(f"Coluna de previsão '{col_name_plot_app}' não gerada.")
         else: st.error("Coluna de previsão não determinada.")
 
-st.sidebar.markdown("---")
-st.sidebar.subheader("Performance dos Modelos")
-if not df_performance_metrics_app.empty:
-    col_modelo_erro_app = 'modelo' if 'modelo' in df_performance_metrics_app.columns else 'Modelo' if 'Modelo' in df_performance_metrics_app.columns else None
-    if col_modelo_erro_app: st.sidebar.dataframe(df_performance_metrics_app.set_index(col_modelo_erro_app))
-    else: st.sidebar.dataframe(df_performance_metrics_app); st.sidebar.warning("Coluna 'modelo'/'Modelo' não encontrada em df_erros.csv.")
-else:
-    st.sidebar.info("Métricas de performance ('df_erros.csv') não encontradas ou vazias.")
+##st.sidebar.markdown("---")
+##st.sidebar.subheader("Performance dos Modelos")
+##if not df_performance_metrics_app.empty:
+    ##col_modelo_erro_app = 'modelo' if 'modelo' in df_performance_metrics_app.columns else 'Modelo' if 'Modelo' in df_performance_metrics_app.columns else None
+    ##if col_modelo_erro_app: st.sidebar.dataframe(df_performance_metrics_app.set_index(col_modelo_erro_app))
+    ##else: st.sidebar.dataframe(df_performance_metrics_app); st.sidebar.warning("Coluna 'modelo'/'Modelo' não encontrada em df_erros.csv.")
+##else:
+    ##st.sidebar.info("Métricas de performance ('df_erros.csv') não encontradas ou vazias.")
