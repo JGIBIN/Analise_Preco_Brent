@@ -59,7 +59,7 @@ fig_hist_ma.add_trace(go.Scatter(x=df_historical_10a['Data'], y=df_historical_10
 
 # Lista de eventos importantes para anotar no gráfico
 eventos = [
-    {'Data': '2014-11-27', 'descricao': 'OPEP decide manter produção, queda de preços', 'event_color': 'white', 'ay_offset': -35},
+    {'Data': '2014-11-27', 'descricao': 'OPEP decide manter produção, queda de preços', 'event_color': 'white', 'ay_offset': -10},
     {'Data': '2016-01-20', 'descricao': 'Preço atinge mínima da década pós-decisão OPEP', 'event_color': 'white', 'ay_offset': -55},
     {'Data': '2020-03-11', 'descricao': 'COVID-19 declarada pandemia global', 'event_color': 'white', 'ay_offset': -35},
     {'Data': '2020-04-20', 'descricao': 'Preço do petróleo WTI fica negativo (afeta Brent)', 'event_color': 'white', 'ay_offset': -45},
