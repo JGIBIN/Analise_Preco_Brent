@@ -1,5 +1,5 @@
 # Ambientes virtuais Python
-STREAMLIT_APP/venv/
+venv/
 
 # Arquivos de cache e compilados do Python
 __pycache__/
