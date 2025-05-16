@@ -9,7 +9,7 @@ from sklearn.pipeline import Pipeline
 from datetime import timedelta
 
 @st.cache_data
-def load_historical_data(file_path='dados/preco_petroleo.csv', use_last_n_years=10):
+def load_historical_data(file_path='C:/Users/ReDragon/Desktop/TECH_CHALLENTE_F4/dados/preco_petroleo.csv', use_last_n_years=10):
     try:
         df = pd.read_csv(file_path)
     except FileNotFoundError:
