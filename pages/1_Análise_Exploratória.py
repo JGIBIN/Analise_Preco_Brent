@@ -9,7 +9,28 @@ from statsmodels.tsa.stattools import adfuller # Para o teste de estacionariedad
 import matplotlib.pyplot as plt # Para alguns gráficos estatísticos
 from utils import load_historical_data # Função para carregar os dados
 
-# --- Seção 1: Visualizando a Montanha-Russa dos Preços ---
+st.set_page_config(page_title="Análise Exploratória do Preço do Petróleo", page_icon="📊", layout="wide")
+
+st.title("📊 Desvendando a Dinâmica do Preço do Petróleo Brent (Últimos 10 Anos)")
+st.markdown("""
+Bem-vindo à nossa análise do preço do petróleo Brent! O mercado de petróleo é como um grande palco global onde muitos fatores – desde decisões políticas e econômicas até a nossa constante necessidade por energia – se encontram e influenciam os preços.
+Nesta exploração, vamos viajar pelos últimos 10 anos de dados para entender melhor o que fez o preço do barril subir e descer, e como esses movimentos podem nos dar pistas para o futuro.
+Para nossos stakeholders, o objetivo é tornar claro como interpretamos esses dados e quais são os aprendizados chave.
+""")
+
+# Carregar dados (a função em utils.py já filtra para os últimos 10 anos)
+df_historical_10a = load_historical_data()
+
+if df_historical_10a.empty:
+    st.error("Ops! Parece que não conseguimos carregar os dados históricos dos últimos 10 anos. Por favor, verifique a fonte dos dados.")
+    st.stop()
+
+# Informa o período coberto pela análise
+st.info(f"Nossa análise cobre o período de **{df_historical_10a['Data'].min().strftime('%d/%m/%Y')}** até **{df_historical_10a['Data'].max().strftime('%d/%m/%Y')}**.")
+
+# Prepara uma cópia dos dados de valor, indexada pela data, para análises estatísticas
+df_for_analysis_stats = df_historical_10a.set_index('Data')['Value'].copy()
+
 st.header("🎢 A Montanha-Russa dos Preços: Uma Década em Perspectiva")
 st.markdown("""
 Imagine o preço do petróleo como uma montanha-russa. O gráfico abaixo nos mostra essa jornada na última década.
@@ -38,66 +59,62 @@ fig_hist_ma.add_trace(go.Scatter(x=df_historical_10a['Data'], y=df_historical_10
 
 # Lista de eventos importantes para anotar no gráfico
 eventos = [
-    {'Data': '2014-11-27', 'descricao': 'OPEP decide manter produção, iniciando queda de preços', 'event_color': 'grey'},
-    {'Data': '2016-01-20', 'descricao': 'Preço atinge mínima da década pós-decisão OPEP', 'event_color': 'grey'},
-    {'Data': '2020-03-11', 'descricao': 'COVID-19 declarada pandemia global', 'event_color': 'black'},
-    {'Data': '2020-04-20', 'descricao': 'Preço do petróleo WTI fica negativo (afeta Brent)', 'event_color': 'black'},
-    {'Data': '2022-02-24', 'descricao': 'Início da Guerra na Ucrânia', 'event_color': 'red'}
+    {'Data': '2014-11-27', 'descricao': 'OPEP decide manter produção, queda de preços', 'event_color': 'white', 'ay_offset': -10},
+    {'Data': '2016-01-20', 'descricao': 'Preço atinge mínima da década pós-decisão OPEP', 'event_color': 'white', 'ay_offset': -55},
+    {'Data': '2020-03-11', 'descricao': 'COVID-19 declarada pandemia global', 'event_color': 'white', 'ay_offset': 0},
+    {'Data': '2020-04-20', 'descricao': 'Preço do petróleo WTI fica negativo (afeta Brent)', 'event_color': 'white', 'ay_offset': -15},
+    {'Data': '2022-02-24', 'descricao': 'Início da Guerra na Ucrânia', 'event_color': 'white', 'ay_offset': -10}
 ]
-# Removi 'ay_offset' da lista de eventos, pois vamos calcular o novo offset dinamicamente.
-
 eventos_filtrados_plot_ma = [e for e in eventos if pd.to_datetime(e['Data']) >= df_historical_10a['Data'].min() and pd.to_datetime(e['Data']) <= df_historical_10a['Data'].max()]
 annotations_list_ma = []
 shapes_list_ma = []
 max_y_plot_ma = df_historical_10a['Value'].max() if not df_historical_10a.empty else 150
 min_y_plot_ma = df_historical_10a['Value'].min() if not df_historical_10a.empty else 0
 
+# Determinar a posição Y da anotação mais alta para ajustar o yaxis_range dinamicamente
+max_annotation_y_multiplier = 1.05
+if eventos_filtrados_plot_ma:
+    max_annotation_y_multiplier = 1.05 + (len(eventos_filtrados_plot_ma) - 1) * 0.05
+
 for i, evento in enumerate(eventos_filtrados_plot_ma):
     event_date = pd.to_datetime(evento['Data'])
     # Linha vertical para marcar o evento
     shapes_list_ma.append({
         'type': 'line',
-        'x0': event_date, 'y0': 0,
-        'x1': event_date, 'y1': 0.9, # Linha vertical vai até 90% da altura do painel
-        'xref': 'x', 'yref': 'paper',
+        'x0': event_date, 'y0': 0,      # Começa na base da área de plotagem
+        'x1': event_date, 'y1': 0.75,    # MODIFICADO: Termina em 90% da altura da área de plotagem
+        'xref': 'x', 'yref': 'paper',   # 'paper' refere-se à área de plotagem total
         'line': {
             'color': evento['event_color'],
             'width': 2,
             'dash': 'dashdot'
         }
     })
-
     # Anotação descritiva do evento
-    y_arrow_tip_paper = 0.80 # Seta aponta para 80% da altura do painel do gráfico (na linha vertical)
-    ay_text_offset_pixels = 30 + (i * 20) # Deslocamento Y do texto para baixo, escalonado: 30, 50, 70, 90, 110...
-
     annotations_list_ma.append({
-        'x': event_date,        # Posição X da ponta da seta e do texto
-        'y': y_arrow_tip_paper, # Posição Y da ponta da seta (em coordenadas 'paper')
-        'yref': 'paper',        # Sistema de coordenadas para 'y'
+        'x': event_date,
+        'y': max_y_plot_ma * (1.05 + i*0.05),
+        'xref': 'x', 'yref': 'y',
         'text': f"<b>{evento['descricao']}</b><br>({event_date.strftime('%b %Y')})",
         'showarrow': True, 'arrowhead': 2, 'arrowwidth':1.5,
-        'arrowcolor': evento['event_color'], # Cor da seta
-        'ax': 0,  # Sem deslocamento X do texto em relação à ponta da seta
-        'ay': ay_text_offset_pixels, # Deslocamento Y do texto (positivo = para baixo)
+        'arrowcolor': evento['event_color'],
+        'ax': 0, 'ay': evento['ay_offset'],
         'font': {'color': 'black', 'size': 10},
-        'bgcolor': 'white', # Fundo branco para o quadro de texto
+        'bgcolor': 'white',
         'opacity': 0.85,
-        'bordercolor': evento['event_color'], # Cor da borda do quadro de texto
+        'bordercolor': evento['event_color'],
         'borderwidth':1, 'borderpad':3
         })
 
-# Ajustar o limite superior do eixo Y
-# Como as anotações agora são posicionadas de forma diferente,
-# o topo do eixo Y pode ficar mais próximo do valor máximo dos dados.
-yaxis_upper_bound = max_y_plot_ma * 1.05 # 5% de margem acima do valor máximo dos dados
+# Ajustar o limite superior do eixo Y para ser um pouco acima da anotação mais alta
+yaxis_upper_bound = max_y_plot_ma * (max_annotation_y_multiplier + 0.10)
 
 fig_hist_ma.update_layout(
     title_text='Preço do Brent, Médias Móveis e Eventos Chave (Últimos 10 Anos)',
     xaxis_title='Data', yaxis_title='Preço (US$ por Barril)', template='plotly_white',
     height=700,
     shapes=shapes_list_ma, annotations=annotations_list_ma,
-    yaxis_range=[min_y_plot_ma * 0.85, yaxis_upper_bound], # Eixo Y ajustado
+    yaxis_range=[min_y_plot_ma * 0.85, yaxis_upper_bound],
     legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="right", x=1)
 )
 st.plotly_chart(fig_hist_ma, use_container_width=True)
