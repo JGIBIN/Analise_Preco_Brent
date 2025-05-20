@@ -264,7 +264,7 @@ if not df_returns_analysis_app.empty:
                       title='Intensidade das Variações do Preço (Volatilidade Móvel Anualizada)')
     fig_vol.update_layout(yaxis_title='Volatilidade Anualizada Estimada', xaxis_title='Data', template='plotly_white')
     st.plotly_chart(fig_vol, use_container_width=True)
-    st.markdown("Picos neste gráfico indicam períodos de alta incerteza e instabilidade nos preços, frequentemente ligados a eventos econômicos ou geopolíticos significativos, exemplo a alta do preço entre 2020 e 2021 devido a pandemia de COVID-19".)
+    st.markdown("Picos neste gráfico indicam períodos de alta incerteza e instabilidade nos preços, frequentemente ligados a eventos econômicos ou geopolíticos significativos, exemplo a alta do preço entre 2020 e 2021 devido a pandemia de COVID-19."
 else:
     st.warning("Não foi possível calcular a volatilidade móvel, pois não há dados de retorno diário.")
 
