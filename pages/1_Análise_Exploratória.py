@@ -60,7 +60,7 @@ fig_hist_ma.add_trace(go.Scatter(x=df_historical_10a['Data'], y=df_historical_10
 eventos = [
     {'Data': '2014-11-27', 'descricao': 'OPEP mantém produção, preços caem', 'color': 'darkgrey', 'ay_offset': -40},
     {'Data': '2016-01-20', 'descricao': 'Preço atinge mínima da década (pós-2014)', 'color': 'darkgrey', 'ay_offset': -70},
-    {'Data': '2020-03-11', 'descricao': 'Pandemia COVID-19 declarada', 'color': 'darkgrey', 'ay_offset': -50},
+    {'Data': '2020-03-11', 'descricao': 'Impacto COVID-19', 'color': 'darkgrey', 'ay_offset': -50},
     {'Data': '2020-04-20', 'descricao': 'WTI Negativo (Impacto Brent)', 'color': 'darkgrey', 'ay_offset': -70},
     {'Data': '2022-02-24', 'descricao': 'Início da Guerra na Ucrânia', 'color': 'darkgrey', 'ay_offset': -50}
 ]
@@ -166,7 +166,7 @@ st.subheader("Separando o Sinal do Ruído: Tendência, Sazonalidade e Resíduos"
 st.markdown("""
 **O que é isso?** A "decomposição" é como desmontar um motor para entender cada peça. Separamos o movimento do preço em três partes:
 * **Tendência:** A direção geral do preço ao longo do tempo (está subindo, descendo ou estável no longo prazo?).
-* **Sazonalidade:** Padrões que se repetem em intervalos fixos? Por exemplo, será que o preço do petróleo tende a ser mais alto em certos meses do ano, todos os anos? (Usamos um ciclo anual de ~252 dias úteis).
+* **Sazonalidade:** Padrões que se repetem em intervalos fixos? Por exemplo, será que o preço do petróleo tende a ser mais alto em certos meses do ano, todos os anos? (Usamos um ciclo anual de 252 dias úteis).
 * **Resíduo:** O que sobra depois de tirarmos a tendência e a sazonalidade. São as flutuações mais aleatórias, o "ruído" do mercado.
 
 **Por que isso importa?** Entender essas partes nos ajuda a ver se existem padrões previsíveis e o quão "barulhento" ou imprevisível é o mercado.
@@ -215,7 +215,7 @@ else:
     st.warning(f"Não temos dados suficientes (precisamos de pelo menos {decomp_period*2} dias) para realizar a decomposição com um período anual de {decomp_period} dias.")
 
 # --- 3.2 Distribuição dos Preços e Retornos ---
-st.subheader("Com Que Frequência Cada Preço (ou Variação de Preço) Ocorreu?")
+st.subheader("Com Que Frequência Cada Preço (ou Variação de Preço) ocorreu?")
 st.markdown("""
 Aqui, olhamos para dois tipos de "fotografias" dos dados:
 1.  **Histograma dos Preços:** Mostra quantas vezes o preço do petróleo atingiu cada faixa de valor (ex: quantas vezes esteve entre $50-$55, $55-$60, etc.). Ajuda a ver se existem níveis de preço mais comuns.
@@ -264,7 +264,7 @@ if not df_returns_analysis_app.empty:
                       title='Intensidade das Variações do Preço (Volatilidade Móvel Anualizada)')
     fig_vol.update_layout(yaxis_title='Volatilidade Anualizada Estimada', xaxis_title='Data', template='plotly_white')
     st.plotly_chart(fig_vol, use_container_width=True)
-    st.markdown("Picos neste gráfico indicam períodos de alta incerteza e instabilidade nos preços, frequentemente ligados a eventos econômicos ou geopolíticos significativos.")
+    st.markdown("Picos neste gráfico indicam períodos de alta incerteza e instabilidade nos preços, frequentemente ligados a eventos econômicos ou geopolíticos significativos, exemplo a alta do preço entre 2020 e 2021 devido a pandemia de COVID-19"
 else:
     st.warning("Não foi possível calcular a volatilidade móvel, pois não há dados de retorno diário.")
 
