@@ -46,5 +46,5 @@ Nossa abordagem combinou uma análise exploratória detalhada dos últimos 10 an
 6.  **Monitoramento e Manutenção:** Ferramentas da cloud, logging, CI/CD.
 
 ### Plano de Deploy realizado
-1. **Foi feito o deploy para o Streamlit utilizando a conexão via Github, isto foi feito com vistas da criação do MVP e posteriormente poderá ser implementada melhorias.
+1.  **Foi feito o deploy para o Streamlit utilizando a conexão via Github, isto foi feito com vistas da criação do MVP e posteriormente poderá ser implementada melhorias.
 """)
