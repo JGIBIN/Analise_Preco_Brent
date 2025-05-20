@@ -34,9 +34,7 @@ LSTM é um tipo de rede neural muito bom para lidar com dados ao longo do tempo,
 * **O que tem de especial no LSTM:**
     * Consegue "lembrar" de coisas que aconteceram há muito tempo nos dados,
     * Lida bem com relações complicadas que os modelos antigos não enxergam,
-    * Pode usar várias informações ao mesmo tempo (como dia da semana, mês, etc.).""")
-
-st.markdown("<br>", unsafe_allow_html=True"""
+    * Pode usar várias informações ao mesmo tempo (como dia da semana, mês, etc.).
 
 * **Por que usamos o LSTM junto com o ARIMAX:**
     1. O modelo ARIMAX nos dá uma boa base, capturando padrões mais simples.
