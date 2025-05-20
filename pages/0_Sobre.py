@@ -37,12 +37,14 @@ Para esta aplicação, tanto a análise exploratória quanto o treinamento dos m
 ### Abordagem da Consultoria
 Nossa abordagem combinou uma análise exploratória detalhada dos últimos 10 anos de dados para extrair insights históricos com a aplicação de técnicas avançadas de modelagem de séries temporais para fornecer previsões acuradas, utilizando os mesmos dados para treinar os modelos.
 
-### Plano para Deploy em Produção do Modelo
-(Resumido - veja versões anteriores para detalhes completos ou adicione aqui)
+### Plano para Deploy em Produção do Modelo (Sugestão)
 1.  **Preparação e Treinamento:** Coleta automatizada, pré-processamento, treinamento (focado nos últimos 10 anos para relevância), versionamento (MLflow/DVC), salvar artefatos.
 2.  **API de Inferência:** FastAPI/Flask, Docker.
 3.  **Deploy da API em Cloud:** AWS, GCP, ou Azure.
 4.  **Agendamento de Retreinamento:** Airflow, Step Functions, etc. (considerar a estratégia de janela móvel ou expansiva para retreino).
 5.  **Deploy do Dashboard Streamlit:** Cloud Run, App Runner, etc.
 6.  **Monitoramento e Manutenção:** Ferramentas da cloud, logging, CI/CD.
+
+### Plano de Deploy realizado
+1. **Foi feito o deploy para o Streamlit utilizando a conexão via Github, isto foi feito com vistas da criação do MVP e posteriormente poderá ser implementada melhorias.
 """)
