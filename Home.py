@@ -46,3 +46,10 @@ st.markdown("""
 - **Streamlit:** Criação do dashboard interativo e MVP.
 - **StatsForecast:** Para o modelo AutoARIMA.
 """)
+
+st.markdown("""
+---
+### 🌐 Projeto disponível no GitHub:
+[👉 Acesse aqui o repositório completo](https://github.com/seu-usuario/seu-repositorio)
+---
+""")
