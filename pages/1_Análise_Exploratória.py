@@ -289,7 +289,7 @@ Muitas vezes, os preços brutos não são estacionários. Uma transformação co
 if not df_for_analysis_stats.dropna().empty:
     # Teste na série original de preços
     adf_result_orig = adfuller(df_for_analysis_stats.dropna())
-    st.write(f"**1. Teste nos Preços Originais ('Value'):**")
+    st.write(f"**1. Teste nos Preços Originais:**")
     st.write(f"  - Estatística do Teste ADF: {adf_result_orig[0]:.4f}")
     st.write(f"  - P-valor: {adf_result_orig[1]:.4f}")
     if adf_result_orig[1] <= 0.05:
