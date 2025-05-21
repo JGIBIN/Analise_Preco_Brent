@@ -44,5 +44,5 @@ st.markdown("""
 - **TensorFlow/Keras (LSTM):** Modelagem de redes neurais recorrentes.
 - **Scikit-learn:** Pré-processamento e métricas de avaliação.
 - **Streamlit:** Criação do dashboard interativo e MVP.
-- **StatsForecast:** Para o modelo AutoARIMA (opcionalmente pré-treinado).
+- **StatsForecast:** Para o modelo AutoARIMA.
 """)
