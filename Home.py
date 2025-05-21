@@ -50,6 +50,6 @@ st.markdown("""
 st.markdown("""
 ---
 ### 🌐 Projeto disponível no GitHub:
-[👉 Acesse aqui o repositório completo](https://github.com/seu-usuario/seu-repositorio)
+[👉 Acesse aqui o repositório completo](https://github.com/JGIBIN/STREAMLIT_APP.git)
 ---
 """)
