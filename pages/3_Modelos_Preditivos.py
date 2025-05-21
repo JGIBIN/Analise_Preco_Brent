@@ -56,7 +56,7 @@ modelo_escolhido_app = st.sidebar.selectbox("🧠 Escolha o modelo",
 last_hist_date_app = series_data_for_models_app.index.max()
 max_pred_date_app = pd.to_datetime('2025-12-31')
 max_days_pred_app = (max_pred_date_app - last_hist_date_app).days if max_pred_date_app > last_hist_date_app else 365
-periodo_previsao_app = st.sidebar.slider("🔮 Dias para prever", 1, max(1,max_days_pred_app), min(30,max(1,max_days_pred_app)))
+periodo_previsao_app = st.sidebar.slider("🔮 Dias para prever", 1, max(1,max_days_pred_app), min(15,max(1,max_days_pred_app)))
 
 if st.sidebar.button("Realizar Previsão 🚀"):
     col_name_plot_app = None 
@@ -240,7 +240,7 @@ data = {
         'AutoARIMA Static - Média móvel (15 dias)',
         'AutoARIMA Mean - Média móvel (15 dias)',
         'LSTM - Real (15 dias)',
-        'LSTM + ARIMA - Real (15 dias)'
+        'LSTM + ARIMA (LSTM Híbrido) - Real (15 dias)'
     ],
     'MAE': [1.394724, 1.394852, 1.343684, 3.508534, 0.539900],
     'RMSE': [3.019235, 2.519988, 2.498479, 16.018503, 0.409574],
