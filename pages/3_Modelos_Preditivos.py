@@ -239,12 +239,11 @@ data = {
         'AutoARIMA Dynamic - Média móvel (15 dias)',
         'AutoARIMA Static - Média móvel (15 dias)',
         'AutoARIMA Mean - Média móvel (15 dias)',
-        'LSTM - Real (15 dias)',
         'LSTM + ARIMA (LSTM Híbrido) - Real (15 dias)'
     ],
-    'MAE': [1.394724, 1.394852, 1.343684, 3.508534, 0.539900],
-    'RMSE': [3.019235, 2.519988, 2.498479, 16.018503, 0.409574],
-    'sMAPE (%)': [1.88, 1.88, 1.81, 4.62, 0.73]
+    'MAE': [1.394724, 1.394852, 1.343684,  0.539900],
+    'RMSE': [3.019235, 2.519988, 2.498479,  0.409574],
+    'sMAPE (%)': [1.88, 1.88, 1.81, 0.73]
 }
 
 # Criação do DataFrame
