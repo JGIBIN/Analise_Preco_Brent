@@ -232,3 +232,38 @@ if st.sidebar.button("Realizar Previsão 🚀"):
 
         elif col_name_plot_app: st.error(f"Coluna de previsão '{col_name_plot_app}' não gerada.")
         else: st.error("Coluna de previsão não determinada.")
+
+# Dados das métricas
+data = {
+    'Modelo': [
+        'AutoARIMA Dynamic - Média móvel (15 dias)',
+        'AutoARIMA Static - Média móvel (15 dias)',
+        'AutoARIMA Mean - Média móvel (15 dias)',
+        'LSTM - Real (15 dias)',
+        'LSTM + ARIMA - Real (15 dias)'
+    ],
+    'MAE': [1.394724, 1.394852, 1.343684, 3.508534, 0.539900],
+    'RMSE': [3.019235, 2.519988, 2.498479, 16.018503, 0.409574],
+    'sMAPE (%)': [1.88, 1.88, 1.81, 4.62, 0.73]
+}
+
+# Criação do DataFrame
+df_metrics = pd.DataFrame(data)
+
+# Título da página
+st.title('📊 Desempenho dos Modelos de Previsão')
+
+st.markdown("""
+Esta tabela apresenta as métricas de avaliação dos modelos de previsão do preço do petróleo Brent.
+As métricas consideradas são:
+- **MAE (Mean Absolute Error)**
+- **RMSE (Root Mean Square Error)**
+- **sMAPE (Symmetric Mean Absolute Percentage Error)**  
+""")
+
+# Exibir a tabela
+st.dataframe(df_metrics, use_container_width=True)
+
+# Destaque para o melhor modelo
+best_model = df_metrics.loc[df_metrics['sMAPE (%)'].idxmin()]
+st.success(f"🏆 Melhor modelo: **{best_model['Modelo']}**, com sMAPE de {best_model['sMAPE (%)']}% e MAE de {best_model['MAE']}")
