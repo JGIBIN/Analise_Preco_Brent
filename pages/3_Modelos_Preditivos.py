@@ -256,9 +256,9 @@ st.title('📊 Desempenho dos Modelos de Previsão')
 st.markdown("""
 Esta tabela apresenta as métricas de avaliação dos modelos de previsão do preço do petróleo Brent.
 As métricas consideradas são:
-- **MAE (Mean Absolute Error)**
-- **RMSE (Root Mean Square Error)**
-- **sMAPE (Symmetric Mean Absolute Percentage Error)**  
+- **MAE (Erro Absoluto Médio)**
+- **RMSE (Raiz do Erro Quadrático Médio)**
+- **sMAPE (Erro Percentual Absoluto Médio Simétrico)**  
 """)
 
 # Exibir a tabela
